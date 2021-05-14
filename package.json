@@ -1,0 +1,25 @@
+{
+	"name": "daily-reading",
+	"version": "1.0.0",
+	"description": "Daily Reading Miniprogram",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kylee0325/daily-reading.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/kylee0325/daily-reading/issues"
+	},
+	"homepage": "https://github.com/kylee0325/daily-reading#readme",
+	"dependencies": {
+		"moment": "^2.29.1"
+	},
+	"devDependencies": {
+		"webpack": "^5.37.0"
+	}
+}

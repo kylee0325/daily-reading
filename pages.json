@@ -1,0 +1,42 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [{
+		"path": "pages/index/index"
+	}, {
+		"path": "pages/user/user"
+	}, {
+		"path": "pages/login/login"
+	}, {
+		"path": "pages/webview/webview",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+
+	}],
+	"tabBar": {
+		"color": "#333333",
+		"selectedColor": "#2979ff",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "首页",
+			"iconPath": "static/images/home.png",
+			"selectedIconPath": "static/images/home2.png"
+		}, {
+			"pagePath": "pages/user/user",
+			"text": "我的",
+			"iconPath": "static/images/mine.png",
+			"selectedIconPath": "static/images/mine2.png"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF",
+		"navigationStyle": "custom"
+	}
+}

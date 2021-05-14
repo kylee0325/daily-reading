@@ -1,0 +1,100 @@
+{
+	"bsonType": "object",
+	"required": ["user_id", "title", "article_url"],
+	"permission": {
+		"read": "doc.uid == auth.uid && doc.article_status == 1 || doc.article_status == 0",
+		"create": "auth.uid != null",
+		"update": "doc.uid == auth.uid",
+		"delete": "doc.uid == auth.uid"
+	},
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID（用户 ID），系统自动生成"
+		},
+		"user_id": {
+			"bsonType": "string",
+			"description": "文章作者ID， 参考`uni-id-users` 表",
+			"foreignKey": "uni-id-users._id",
+			"defaultValue": {
+				"$env": "uid"
+			}
+		},
+		"keywords": {
+			"bsonType": "string",
+			"title": "关键词",
+			"description": "关键词",
+			"label": "关键词",
+			"trim": "both"
+		},
+		"title": {
+			"bsonType": "string",
+			"title": "标题",
+			"description": "标题",
+			"label": "标题",
+			"trim": "both"
+		},
+		"description": {
+			"bsonType": "string",
+			"title": "文章简介",
+			"description": "文章简介",
+			"label": "简介",
+			"trim": "both"
+		},
+		"article_url": {
+			"bsonType": "string",
+			"title": "文章链接",
+			"description": "文章链接",
+			"label": "链接",
+			"trim": "both"
+		},
+		"article_status": {
+			"bsonType": "int",
+			"title": "文章状态",
+			"description": "文章状态：0 公有 1 私有",
+			"defaultValue": 0,
+			"enum": [{
+				"value": 0,
+				"text": "公有"
+			}, {
+				"value": 1,
+				"text": "私有"
+			}]
+		},
+		"view_count": {
+			"bsonType": "int",
+			"title": "阅读数量",
+			"description": "阅读数量",
+			"permission": {
+				"write": true
+			}
+		},
+		"like_count": {
+			"bsonType": "int",
+			"description": "收藏数",
+			"permission": {
+				"write": true
+			}
+		},
+		"publish_date": {
+			"bsonType": "timestamp",
+			"title": "发表时间",
+			"description": "发表时间",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"last_modify_date": {
+			"bsonType": "timestamp",
+			"title": "最后修改时间",
+			"description": "最后修改时间",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"mode": {
+			"bsonType": "number",
+			"title": "排版显示模式",
+			"description": "排版显示模式,如左图右文、上图下文等"
+		}
+	}
+}

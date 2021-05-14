@@ -1,0 +1,88 @@
+<template>
+	<mescroll-uni ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :topbar="true" top="44px">
+		<article-list :list="dataList" v-on:detail="handleDetail" v-on:edit="handleUpdate"></article-list>
+	</mescroll-uni>
+</template>
+
+<script>
+import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js';
+import { getArticles } from '@/api';
+
+export default {
+	name: 'scroll-list',
+	mixins: [MescrollMixin],
+	props: {},
+	data() {
+		return {
+			mescroll: null,
+			downOption: {},
+			upOption: {
+				use: true,
+				isLock: false,
+				auto: false,
+				page: {
+					size: 10 // 每页数据的数量,默认10
+				},
+				noMoreSize: 5, // 配置列表的总数量要大于等于5条才显示'-- END --'的提示
+				textNoMore: '-- 已经到底了 --',
+				empty: {
+					tip: '暂无相关数据'
+				}
+			},
+			// 列表数据
+			dataList: []
+		};
+	},
+	methods: {
+		mescrollInit(mescroll) {
+			this.mescroll = mescroll;
+		},
+		/*下拉刷新的回调, 有3种处理方式:*/
+		downCallback() {
+			this.mescroll.resetUpScroll();
+		},
+		/*上拉加载的回调*/
+		async upCallback(page) {
+			let pageNum = page.num;
+			let pageSize = page.size;
+
+			const finalParams = {
+				pageNo: pageNum,
+				pageSize: pageSize
+			};
+
+			const [err, res] = await getArticles(finalParams);
+			if (err) {
+				this.mescroll.endErr();
+				return;
+			}
+
+			let curPageData = res.data.rows || [];
+			let curPageLen = curPageData.length;
+			let hasNext = curPageLen >= 10;
+
+			if (pageNum == 1) this.dataList = [];
+			this.dataList = this.dataList.concat(curPageData);
+			this.mescroll.endSuccess(curPageLen, hasNext);
+		},
+		handleDetail(item) {
+			uni.navigateTo({
+				url: '/pages/webview/webview?url=' + item.article_url
+			});
+		},
+		handleUpdate(item) {
+			console.log(item);
+			uni.navigateTo({
+				url: '../ink-articles/edit?id=' + item._id,
+				events: {
+					refreshData: () => {
+						_this.downCallback();
+					}
+				}
+			});
+		}
+	}
+};
+</script>
+
+<style lang="scss"></style>
