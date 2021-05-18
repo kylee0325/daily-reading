@@ -3,16 +3,16 @@
 		<template v-slot:navbar>
 			<view class="nav-bar">
 				<u-avatar :src="userInfo.avatar" size="mini" style="margin-right: 24rpx;"></u-avatar>
-				<u-search placeholder="搜索关键词" v-model="keyword" :show-action="false"></u-search>
+				<u-search placeholder="搜索关键词" v-model="keyword" :show-action="false" @search="handleSearch"></u-search>
 			</view>
 		</template>
 
-		<view class="index-content"><scroll-list></scroll-list></view>
+		<view class="index-content"><scroll-list ref="scrollList" :params="{ keyword: keyword }"></scroll-list></view>
 
-		<!-- <view class="start-wrap" @click="handleArticleAdd">
+		<view class="start-wrap" @click="handleArticleAdd">
 			<u-icon name="plus"></u-icon>
-			<text>加墨</text>
-		</view> -->
+			<text>发布</text>
+		</view>
 	</page-container>
 </template>
 
@@ -22,7 +22,9 @@ import { mapState, mapMutations } from 'vuex';
 let _this;
 export default {
 	data() {
-		return {};
+		return {
+			keyword: ''
+		};
 	},
 	computed: mapState(['hasLogin', 'userInfo']),
 	created() {
@@ -81,17 +83,19 @@ export default {
 				}
 			});
 		},
+		handleSearch(v) {
+			_this.$refs.scrollList.downCallback();
+		},
 		handleArticleAdd() {
 			if (!this.hasLogin) {
 				this.guideToLogin();
 				return;
 			}
 			uni.navigateTo({
-				url: '/pages/ink-articles/add',
+				url: '/pages/articles/edit',
 				events: {
-					// 监听修改页面成功修改数据后, 刷新当前页面数据
 					refreshData: () => {
-						_this.getArticleList();
+						_this.$refs.scrollList.downCallback();
 					}
 				}
 			});
@@ -116,7 +120,8 @@ export default {
 
 <style lang="scss">
 page {
-	background-color: #f5f7fa;
+	// background-color: #f5f7fa;
+	background-color: $uni-bg-color-grey;
 }
 .nav-bar {
 	display: flex;
@@ -132,7 +137,7 @@ page {
 .start-wrap {
 	position: fixed;
 	right: 0;
-	bottom: 100rpx;
+	bottom: 50rpx;
 	display: flex;
 	align-items: center;
 	height: 64rpx;
@@ -146,7 +151,7 @@ page {
 	text {
 		margin-left: 8rpx;
 		font-size: 12px;
-		color: $uni-text-color-grey;
+		color: $uni-color-primary;
 	}
 }
 </style>

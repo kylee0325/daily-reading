@@ -11,4 +11,68 @@ module.exports = class ArticleController extends Controller {
 		} = event;
 		return this.service.article.getArticles(data)
 	}
+
+	async getArticleById({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.getArticleById(data)
+	}
+
+	async updateArticleById({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.updateArticleById(data)
+	}
+
+	async addArticle({
+		event,
+		context
+	}) {
+		const {
+			data,
+			userInfo
+		} = event;
+		return this.service.article.addArticle({
+			...data,
+			user_id: userInfo._id
+		})
+	}
+
+	async deleteArticleById({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.deleteArticleById(data)
+	}
+
+	async realDeleteArticleById({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.realDeleteArticleById(data)
+	}
+
+	async rePublishArticleById({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.rePublishArticleById(data)
+	}
 }

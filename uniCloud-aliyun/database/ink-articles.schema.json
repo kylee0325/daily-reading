@@ -91,6 +91,19 @@
 				"$env": "now"
 			}
 		},
+		"is_delete": {
+			"bsonType": "number",
+			"title": "删除的标记",
+			"description": "逻辑删除的标记，默认0",
+			"defaultValue": 0,
+			"enum": [{
+				"value": 0,
+				"text": "未删除"
+			}, {
+				"value": 1,
+				"text": "已删除"
+			}]
+		},
 		"mode": {
 			"bsonType": "number",
 			"title": "排版显示模式",

@@ -16,7 +16,7 @@
 				<slot name="navbar-right"></slot>
 			</template>
 		</u-navbar>
-		<view class="loading-wrap" v-if="loading"><u-loading :show="loading" size="48"></u-loading></view>
+		<!-- <view class="loading-wrap" v-if="loading"><u-loading :show="loading" size="48"></u-loading></view> -->
 		<u-no-network></u-no-network>
 		<view class="page-content"><slot></slot></view>
 	</view>
@@ -62,14 +62,14 @@ export default {
 			default: null
 		}
 	},
-	data() {
-		return {
-			loading: true
-		};
-	},
-	mounted() {
-		this.loading = false;
-	}
+	// data() {
+	// 	return {
+	// 		loading: true
+	// 	};
+	// },
+	// mounted() {
+	// 	this.loading = false;
+	// }
 };
 </script>
 

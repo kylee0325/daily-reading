@@ -4,7 +4,6 @@ module.exports = (options) => {
 		uniID.init(options)
 	}
 	return async function auth(ctx, next) {
-		console.log(ctx.event.action)
 		const whiteList = ['article/getArticles']
 		if (!whiteList.includes(ctx.event.action)) {
 			const auth = await uniID.checkToken(ctx.event.uniIdToken)
@@ -15,6 +14,7 @@ module.exports = (options) => {
 				};
 			}
 			ctx.auth = auth
+			ctx.event.userInfo = auth.userInfo
 		}
 		await next()
 		ctx.body = {

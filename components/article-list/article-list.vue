@@ -19,10 +19,13 @@
 			</template>
 			<template v-slot:foot>
 				<view class="footer-box">
-					<view style="flex: 1;">
+					<view style="flex: 1;" v-if="item.keywords.length > 0">
 						<u-tag v-for="keyword in item.keywords.split(',')" :key="keyword" :text="keyword" type="info" shape="circle" size="mini" style="margin-right: 8rpx"></u-tag>
 					</view>
-					<u-icon v-if="userInfo._id === item.user_id" name="edit-pen" size="28" @tap.stop="$emit('edit', item)"></u-icon>
+					<!-- <u-icon v-if="userInfo._id === item.user_id" name="edit-pen" size="28" @tap.stop="$emit('edit', item)"></u-icon> -->
+					<u-icon v-if="type === 'recycle'" name="file-text" size="28" @tap.stop="$emit('publish', item)"></u-icon>
+					<u-icon v-if="type !== 'recycle'" name="edit-pen" size="28" @tap.stop="$emit('edit', item)"></u-icon>
+					<u-icon name="trash" size="28" style="margin-left: 12rpx;" @tap.stop="$emit('delete', item)"></u-icon>
 				</view>
 			</template>
 		</u-card>
@@ -36,6 +39,10 @@ import { mapState } from 'vuex';
 export default {
 	name: 'article-list',
 	props: {
+		type: {
+			type: String, // 回收站 recycle
+			default: ''
+		},
 		list: {
 			type: Array,
 			default: () => []
@@ -68,6 +75,6 @@ export default {
 }
 .footer-box {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 }
 </style>

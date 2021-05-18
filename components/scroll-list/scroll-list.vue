@@ -1,17 +1,26 @@
 <template>
 	<mescroll-uni ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :topbar="true" top="44px">
-		<article-list :list="dataList" v-on:detail="handleDetail" v-on:edit="handleUpdate"></article-list>
+		<article-list :list="dataList" v-on:detail="handleDetail" v-on:edit="handleUpdate" v-on:delete="handleDelete" :type="type" v-on:publish="handlePublish"></article-list>
 	</mescroll-uni>
 </template>
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js';
-import { getArticles } from '@/api';
+import { getArticles, deleteArticleById, realDeleteArticleById, rePublishArticleById } from '@/api';
 
 export default {
 	name: 'scroll-list',
 	mixins: [MescrollMixin],
-	props: {},
+	props: {
+		type: {
+			type: String, // 回收站 recycle
+			default: ''
+		},
+		params: {
+			type: Object,
+			default: null
+		}
+	},
 	data() {
 		return {
 			mescroll: null,
@@ -39,7 +48,7 @@ export default {
 		},
 		/*下拉刷新的回调, 有3种处理方式:*/
 		downCallback() {
-			this.mescroll.resetUpScroll();
+			this.mescroll.resetUpScroll(true);
 		},
 		/*上拉加载的回调*/
 		async upCallback(page) {
@@ -48,7 +57,9 @@ export default {
 
 			const finalParams = {
 				pageNo: pageNum,
-				pageSize: pageSize
+				pageSize: pageSize,
+				...this.params,
+				...(this.type === 'recycle' ? { is_delete: 1 } : null)
 			};
 
 			const [err, res] = await getArticles(finalParams);
@@ -71,15 +82,63 @@ export default {
 			});
 		},
 		handleUpdate(item) {
-			console.log(item);
+			let _this = this;
 			uni.navigateTo({
-				url: '../ink-articles/edit?id=' + item._id,
+				url: '/pages/articles/edit?id=' + item._id,
 				events: {
 					refreshData: () => {
 						_this.downCallback();
 					}
 				}
 			});
+		},
+		handleDelete(item) {
+			let _this = this;
+			uni.showModal({
+				title: '提示',
+				content: '确定删除该文章吗？',
+				success: function(res) {
+					if (res.confirm) {
+						_this.deleteArticle(item._id);
+					}
+				}
+			});
+		},
+		handlePublish(item) {
+			let _this = this;
+			uni.showModal({
+				title: '提示',
+				content: '确定重新发布该文章吗？',
+				success: function(res) {
+					if (res.confirm) {
+						_this.publishArticle(item._id);
+					}
+				}
+			});
+		},
+		async deleteArticle(id) {
+			uni.showLoading({
+				mask: true
+			});
+			const [err, res] = await (this.type === 'recycle' ? realDeleteArticleById(id) : deleteArticleById(id));
+			uni.hideLoading();
+			if (err) {
+				console.log(err);
+				return;
+			}
+			this.downCallback();
+		},
+		async publishArticle(id) {
+			uni.showLoading({
+				mask: true
+			});
+			const [err, res] = await rePublishArticleById(id);
+			uni.hideLoading();
+			if (err) {
+				console.log(err);
+				return;
+			}
+			this.downCallback();
 		}
 	}
 };

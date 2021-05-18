@@ -10,7 +10,7 @@
 		</view>
 
 		<view class="u-m-t-20">
-			<u-cell-group><u-cell-item icon="rmb-circle" title="支付"></u-cell-item></u-cell-group>
+			<u-cell-group><u-cell-item icon="trash" title="回收站" @tap="fabClick"></u-cell-item></u-cell-group>
 		</view>
 
 		<view class="u-m-t-20">
@@ -42,6 +42,11 @@ export default {
 			if (this.hasLogin) return;
 			uni.navigateTo({
 				url: '../login/login'
+			});
+		},
+		fabClick() {
+			uni.navigateTo({
+				url: './recycle-station'
 			});
 		}
 	}
