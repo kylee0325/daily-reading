@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { getArticleById, addArticle, updateArticleById } from '@/api';
+import { getArticleById, addArticle, updateArticleById, getKeywords } from '@/api';
 
 let _this;
 export default {
@@ -81,6 +81,7 @@ export default {
 	onLoad(e) {
 		_this = this;
 		this.id = e.id;
+		this.getKeywords();
 		if (e.id) {
 			this.getDetail();
 		}
@@ -101,6 +102,16 @@ export default {
 				return;
 			}
 			this.form = res.data[0];
+		},
+		async getKeywords() {
+			const [err, res] = await getKeywords();
+			console.log('<-----res----->');
+			console.log(res);
+			if (err) {
+				console.log(err);
+				return;
+			}
+			this.keywordList = res.data;
 		},
 		async addArticle() {
 			uni.showLoading({

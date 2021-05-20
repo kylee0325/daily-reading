@@ -56,6 +56,20 @@ module.exports = class ArticleController extends Controller {
 		return this.service.article.deleteArticleById(data)
 	}
 
+	async getDeletedArticles({
+		event,
+		context
+	}) {
+		const {
+			data,
+			userInfo
+		} = event;
+		return this.service.article.getDeletedArticles({
+			...data,
+			user_id: userInfo._id
+		})
+	}
+
 	async realDeleteArticleById({
 		event,
 		context
@@ -74,5 +88,15 @@ module.exports = class ArticleController extends Controller {
 			data
 		} = event;
 		return this.service.article.rePublishArticleById(data)
+	}
+
+	async getKeywords({
+		event,
+		context
+	}) {
+		const {
+			data
+		} = event;
+		return this.service.article.getKeywords(data)
 	}
 }

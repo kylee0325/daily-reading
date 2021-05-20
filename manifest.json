@@ -1,5 +1,5 @@
 {
-    "name" : "daily-reading",
+    "name" : "每日造犁",
     "appid" : "__UNI__D6D813D",
     "description" : "",
     "versionName" : "1.0.0",
@@ -52,7 +52,8 @@
     "mp-weixin" : {
         "appid" : "wx0d29032527a10fd9",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "minified" : true
         },
         "usingComponents" : true
     },

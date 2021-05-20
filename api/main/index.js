@@ -29,3 +29,11 @@ export function realDeleteArticleById(id) {
 export function rePublishArticleById(id) {
 	return request('article/rePublishArticleById', id)
 }
+
+export function getDeletedArticles(params) {
+	return request('article/getDeletedArticles', params)
+}
+
+export function getKeywords(params) {
+	return request('article/getKeywords', params)
+}

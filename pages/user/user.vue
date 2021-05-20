@@ -45,6 +45,12 @@ export default {
 			});
 		},
 		fabClick() {
+			if (!this.hasLogin) {
+				uni.showToast({
+					title: '请先登录'
+				});
+				return;
+			}
 			uni.navigateTo({
 				url: './recycle-station'
 			});

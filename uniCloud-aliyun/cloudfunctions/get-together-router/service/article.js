@@ -125,6 +125,51 @@ module.exports = class ArticleService extends Service {
 		}
 	}
 
+	async getDeletedArticles(params = {}) {
+		const {
+			pageSize = 10, pageNo = 1, user_id
+		} = params;
+
+		const res = await db.collection('ink-articles').aggregate()
+			.match({
+				is_delete: dbCmd.eq(1),
+				user_id: user_id
+			})
+			.lookup({
+				from: 'uni-id-users',
+				localField: 'user_id',
+				foreignField: '_id',
+				as: 'user',
+			})
+			.replaceRoot({
+				newRoot: $.mergeObjects([$.arrayElemAt(['$user', 0]), '$$ROOT'])
+			})
+			.project({
+				user: 0,
+				last_login_date: 0,
+				last_login_ip: 0,
+				register_ip: 0,
+				role: 0,
+				token: 0,
+				wx_openid: 0,
+				register_date: 0
+			})
+			.sort({
+				last_modify_date: -1
+			})
+			.skip((pageNo - 1) * pageSize)
+			.limit(pageSize)
+			.end()
+
+		return {
+			data: {
+				rows: res.data,
+				pageSize,
+				pageNo
+			}
+		}
+	}
+
 	async rePublishArticleById(id) {
 		const res = await db.collection('ink-articles')
 			.doc(id)
@@ -146,6 +191,19 @@ module.exports = class ArticleService extends Service {
 
 		return {
 			data: res
+		}
+	}
+
+	async getKeywords() {
+		const res = await db.collection('ink-articles-keywords')
+			.get()
+		let arr = [];
+		if (res && res.data && res.data.length > 0) {
+			arr = res.data.map(item => item.name)
+			arr = [...new Set(arr)]
+		}
+		return {
+			data: arr
 		}
 	}
 }

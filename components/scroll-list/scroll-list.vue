@@ -6,7 +6,7 @@
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js';
-import { getArticles, deleteArticleById, realDeleteArticleById, rePublishArticleById } from '@/api';
+import { getArticles, getDeletedArticles, deleteArticleById, realDeleteArticleById, rePublishArticleById } from '@/api';
 
 export default {
 	name: 'scroll-list',
@@ -58,11 +58,10 @@ export default {
 			const finalParams = {
 				pageNo: pageNum,
 				pageSize: pageSize,
-				...this.params,
-				...(this.type === 'recycle' ? { is_delete: 1 } : null)
+				...this.params
 			};
 
-			const [err, res] = await getArticles(finalParams);
+			const [err, res] = await (this.type === 'recycle' ? getDeletedArticles(finalParams) : getArticles(finalParams));
 			if (err) {
 				this.mescroll.endErr();
 				return;
