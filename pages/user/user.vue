@@ -10,7 +10,7 @@
 		</view>
 
 		<view class="u-m-t-20">
-			<u-cell-group><u-cell-item icon="trash" title="回收站" @tap="fabClick"></u-cell-item></u-cell-group>
+			<u-cell-group><u-cell-item icon="trash" title="回收站" @tap="fabClick('./recycle-station')"></u-cell-item></u-cell-group>
 		</view>
 
 		<view class="u-m-t-20">
@@ -23,7 +23,7 @@
 		</view>
 
 		<view class="u-m-t-20">
-			<u-cell-group><u-cell-item icon="setting" title="设置"></u-cell-item></u-cell-group>
+			<u-cell-group><u-cell-item icon="setting" title="设置" @tap="fabClick('./setting')"></u-cell-item></u-cell-group>
 		</view>
 	</page-container>
 </template>
@@ -44,7 +44,7 @@ export default {
 				url: '../login/login'
 			});
 		},
-		fabClick() {
+		fabClick(path) {
 			if (!this.hasLogin) {
 				uni.showToast({
 					title: '请先登录'
@@ -52,7 +52,7 @@ export default {
 				return;
 			}
 			uni.navigateTo({
-				url: './recycle-station'
+				url: path
 			});
 		}
 	}

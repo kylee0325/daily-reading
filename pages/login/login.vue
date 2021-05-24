@@ -110,6 +110,7 @@ export default {
 			bottom: 0;
 			right: 0;
 			opacity: 0;
+			z-index: 99;
 		}
 	}
 }
